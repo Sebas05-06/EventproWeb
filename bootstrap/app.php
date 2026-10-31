@@ -12,7 +12,7 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
-        // Railway termina HTTPS en su proxy; confiar en él para generar URLs https
+        // Vercel termina HTTPS en su proxy; confiar en él para generar URLs https
         $middleware->trustProxies(at: '*');
     })
     ->withExceptions(function (Exceptions $exceptions): void {

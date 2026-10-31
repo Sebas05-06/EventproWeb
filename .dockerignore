@@ -1,0 +1,7 @@
+.env
+.idea
+.git
+node_modules
+vendor
+database/database.sqlite
+storage/logs/*
