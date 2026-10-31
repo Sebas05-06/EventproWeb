@@ -16,7 +16,7 @@ class DatabaseSeeder extends Seeder
         // Usuario de demostración (cambiar la contraseña en producción)
         $admin = User::firstOrCreate(
             ['email' => 'admin@ejemplo.com'],
-            ['name' => 'Administrador', 'password' => 'password']
+            ['name' => 'Administrador', 'password' => env('ADMIN_PASSWORD', 'password')]
         );
 
         $datos = [
