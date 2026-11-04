@@ -1,7 +1,0 @@
-.env
-.idea
-node_modules
-database/database.sqlite
-storage/logs
-storage/framework/views
-tests

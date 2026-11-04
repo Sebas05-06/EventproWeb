@@ -57,7 +57,7 @@ En Windows (PowerShell) reemplaza `cp` por `copy` y `touch database/database.sql
 
 Abre `http://localhost:8000`. Para desarrollo con recarga automática de estilos, ejecuta `npm run dev` en una segunda terminal en lugar de `npm run build`.
 
-Usuario de demostración (creado por el seeder): `admin@ejemplo.com` / `password`. Cámbialo antes de publicar el sitio.
+El seeder crea un usuario administrador con las variables `ADMIN_EMAIL` y `ADMIN_PASSWORD`. Si no se definen, usa `admin@ejemplo.com` / `password` (solo para pruebas locales; defínelas antes de publicar el sitio).
 
 ## Capturas de pantalla
 
@@ -85,18 +85,20 @@ Formulario de evento
 
 ![Formulario de evento](docs/capturas/eventos-formulario.png)
 
-## Despliegue en Vercel
+## Despliegue en Render
 
-El proyecto usa el runtime comunitario `vercel-php` (ver `vercel.json` y `api/index.php`). Necesita una base de datos externa (MySQL o Postgres), porque SQLite no funciona en Vercel.
+El proyecto se despliega en Render como Web Service con lenguaje **Docker** (ver `Dockerfile` y `docker-start.sh`). Deja vacío el campo de comando de inicio.
 
-1. Crea la base de datos externa y guarda sus datos de conexión.
-2. Sube el proyecto a GitHub (sin `.env`).
-3. En Vercel importa el repositorio y carga las variables de `.env.vercel.example`.
-4. Despliega. Las migraciones se ejecutan en cada despliegue (script `vercel` de `composer.json`).
-5. Una sola vez, desde tu equipo y con las variables `DB_*` apuntando a la base remota, ejecuta `php artisan db:seed` para cargar recintos, servicios y el usuario de demostración.
+Variables de entorno que se cargan en Render (nunca se suben al repositorio):
 
-Si cambias los estilos de Tailwind, ejecuta `npm run build` y sube `public/build` al repositorio, porque Vercel no compila los assets.
+| Variable | Valor |
+|---|---|
+| `APP_KEY` | Clave generada con `php artisan key:generate --show` |
+| `APP_ENV` | `production` |
+| `APP_DEBUG` | `false` |
+| `APP_URL` | URL pública del sitio |
+| `LOG_CHANNEL` | `stderr` |
+| `ADMIN_EMAIL` | Correo del usuario administrador |
+| `ADMIN_PASSWORD` | Contraseña del usuario administrador |
 
-## Despliegue en Render (alternativa)
-
-El `Dockerfile` y `docker-start.sh` permiten desplegar en Render como Web Service con lenguaje **Docker**. Deja vacío el campo de comando de inicio. Usa la misma base de datos externa (MySQL) y carga las variables de `.env.vercel.example` más `APP_ENV=production`, `APP_DEBUG=false`, `SESSION_DRIVER=database`, `CACHE_STORE=database` y `LOG_CHANNEL=stderr`. Las migraciones se ejecutan al arrancar.
+Por defecto la aplicación usa SQLite dentro del contenedor. En cada arranque se ejecutan las migraciones y el seeder, que carga los recintos, los servicios y el administrador. Los datos creados después se pierden cuando Render reinicia el servicio. Para conservarlos, define `DB_CONNECTION=mysql` junto con `DB_HOST`, `DB_PORT`, `DB_DATABASE`, `DB_USERNAME`, `DB_PASSWORD` y `MYSQL_ATTR_SSL_CA` (ruta relativa del certificado, por ejemplo `certs/aiven-ca.pem`) apuntando a una base MySQL externa.
