@@ -13,9 +13,9 @@ class DatabaseSeeder extends Seeder
 {
     public function run(): void
     {
-        // Usuario de demostración (cambiar la contraseña en producción)
-        $admin = User::firstOrCreate(
-            ['email' => 'admin@ejemplo.com'],
+        // Credenciales por variables de entorno (ADMIN_EMAIL y ADMIN_PASSWORD)
+        $admin = User::updateOrCreate(
+            ['email' => env('ADMIN_EMAIL', 'admin@ejemplo.com')],
             ['name' => 'Administrador', 'password' => env('ADMIN_PASSWORD', 'password')]
         );
 
