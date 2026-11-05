@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ContactoController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\EventoController;
 use App\Http\Controllers\LandingController;
 use App\Http\Controllers\ProfileController;
@@ -11,9 +12,7 @@ Route::get('/recintos', [LandingController::class, 'recintos'])->name('recintos'
 Route::get('/cotizacion', [LandingController::class, 'cotizacion'])->name('cotizacion');
 Route::post('/contacto', [ContactoController::class, 'store'])->name('contacto.store');
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+Route::get('/dashboard', [DashboardController::class, 'index'])->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
     Route::resource('eventos', EventoController::class)->except('show');

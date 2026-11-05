@@ -25,6 +25,7 @@
         <a class="btn btn--outline btn--small" href="{{ route('dashboard') }}">Panel</a>
       @else
         <a class="btn btn--outline btn--small" href="{{ route('login') }}">Ingresar</a>
+        <a class="btn btn--outline btn--small" href="{{ route('register') }}">Registrarse</a>
       @endauth
       <a class="btn btn--primary btn--small nav__cta" href="{{ route('cotizacion') }}" target="_blank" rel="noopener">Pedir cotización</a>
     </nav>
