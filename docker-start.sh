@@ -6,7 +6,7 @@ sed -ri "s/<VirtualHost \*:80>/<VirtualHost *:${PORT}>/" /etc/apache2/sites-avai
 
 # Artisan corre como www-data para que Apache pueda leer y escribir lo que se crea
 artisan() {
-  su -s /bin/sh www-data -c "php artisan $*"
+  su -p -s /bin/sh www-data -c "php artisan $*"
 }
 
 artisan package:discover --ansi

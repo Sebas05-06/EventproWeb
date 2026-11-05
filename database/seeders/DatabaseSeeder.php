@@ -13,11 +13,18 @@ class DatabaseSeeder extends Seeder
 {
     public function run(): void
     {
-        // Credenciales por variables de entorno (ADMIN_EMAIL y ADMIN_PASSWORD)
+        // Credenciales por variables de entorno (ADMIN_EMAIL y ADMIN_PASSWORD); por defecto, solo para pruebas locales
+        // trim() descarta espacios invisibles al copiar los valores en el panel del hosting
+        $correo = trim((string) env('ADMIN_EMAIL', 'admin@ejemplo.com'));
+        $clave = trim((string) env('ADMIN_PASSWORD', 'password'));
+
         $admin = User::updateOrCreate(
-            ['email' => env('ADMIN_EMAIL', 'admin@ejemplo.com')],
-            ['name' => 'Administrador', 'password' => env('ADMIN_PASSWORD', 'password')]
+            ['email' => $correo],
+            ['name' => 'Administrador', 'password' => $clave]
         );
+
+        // Diagnóstico en el log: correo creado y largo de la clave (no la muestra)
+        $this->command?->info('Admin [' . $admin->email . '] clave de ' . strlen($clave) . ' caracteres, correo desde ' . (env('ADMIN_EMAIL') ? 'ADMIN_EMAIL' : 'valor por defecto'));
 
         $datos = [
             ['Sala Ejecutiva', 'Reuniones, capacitaciones y presentaciones de equipos pequeños.', 80, 500, false, [40, 25, 30]],
